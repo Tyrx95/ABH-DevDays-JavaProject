@@ -77,6 +77,9 @@ public class Restaurant extends BaseModel {
 	@Column(name = "longitude")
 	private Float longitude;
 
+	@Column(name = "starRating")
+	private Integer starRating;
+
 	@OneToMany(mappedBy = "restaurantId")
 	private List<RestaurantPhoto> photos;
 
@@ -96,8 +99,7 @@ public class Restaurant extends BaseModel {
 	@Transient
 	private Double averageRating;
 
-	@Transient
-	private Integer starRating;
+
 
 
 
@@ -416,38 +418,6 @@ public class Restaurant extends BaseModel {
 	}
 
 	/**
-	 *  get the star rating
-	 * @return the Star rating
-	 */
-	public Integer getStarRating() {
-		Integer starRating;
-		if(this.getAverageRating()>=0.25 && this.getAverageRating()<2){
-			starRating=1;
-		}
-		else if(this.getAverageRating()>=2 && this.getAverageRating()<3){
-			starRating=2;
-		}
-		else if(this.getAverageRating()>=3 && this.getAverageRating()<4){
-			starRating=3;
-		}
-		else if(this.getAverageRating()>=4 && this.getAverageRating()<4.75){
-			starRating=4;
-		}
-		else{
-			starRating=5;
-		}
-		return starRating;
-	}
-
-	/**
-	 * set star rating
-	 * @param starRating the star rating
-	 */
-	public void setStarRating(Integer starRating) {
-		this.starRating = starRating;
-	}
-
-	/**
 	 * Gets latitude.
 	 *
 	 * @return the latitude
@@ -490,5 +460,21 @@ public class Restaurant extends BaseModel {
 	 */
 	public void setAverageRating(Double averageRating) {
 		this.averageRating = averageRating;
+	}
+
+	/**
+	 *  set star rating
+	 * @return the star rating
+	 */
+	public Integer getStarRating() {
+		return starRating;
+	}
+
+	/**
+	 *
+	 * @param starRating the star rating
+	 */
+	public void setStarRating(Integer starRating) {
+		this.starRating = starRating;
 	}
 }

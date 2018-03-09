@@ -94,7 +94,7 @@ public class RestaurantService extends BaseService {
 		}
 
 		if (restaurantFilter.rating != null && restaurantFilter.rating != 0){
-			criteria.add(Restrictions.eq("numberOfRatings", restaurantFilter.rating));
+			criteria.add(Restrictions.eq("starRating", restaurantFilter.rating));
 		}
 
 		Long numberOfPages = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult()) / restaurantFilter.pageSize;
@@ -253,8 +253,32 @@ public class RestaurantService extends BaseService {
 		}
 
 		getSession().save(restaurantReview);
+		updateStarRating(reviewForm.getRestaurantId());
 		return true;
 	}
+
+	private void updateStarRating(final UUID restaurantId) {
+		Restaurant restaurant = getRestaurantWithId(restaurantId);
+		int starRating;
+		if(restaurant.getAverageRating()>=0.25 && restaurant.getAverageRating()<2){
+			starRating=1;
+		}
+		else if(restaurant.getAverageRating()>=2 && restaurant.getAverageRating()<3){
+			starRating=2;
+		}
+		else if(restaurant.getAverageRating()>=3 && restaurant.getAverageRating()<4){
+			starRating=3;
+		}
+		else if(restaurant.getAverageRating()>=4 && restaurant.getAverageRating()<4.75){
+			starRating=4;
+		}
+		else{
+			starRating=5;
+		}
+		restaurant.setStarRating(starRating);
+		getSession().save(restaurant);
+	}
+
 
 	/**
 	 * Gets number of restaurants.
