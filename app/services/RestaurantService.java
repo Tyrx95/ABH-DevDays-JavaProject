@@ -117,39 +117,11 @@ public class RestaurantService extends BaseService {
 
 		List<Restaurant> restaurants = criteria.list();
 
-
-
-/*
-		if (restaurantFilter.rating != null && restaurantFilter.rating != 0){
-			restaurants = restaurants.stream().filter(restaurant -> {
-				int starRating;
-				if(restaurant.getAverageRating()>=0.25 && restaurant.getAverageRating()<2){
-					starRating=1;
-				}
-				else if(restaurant.getAverageRating()>=2 && restaurant.getAverageRating()<3){
-					starRating=2;
-				}
-				else if(restaurant.getAverageRating()>=3 && restaurant.getAverageRating()<4){
-					starRating=3;
-				}
-				else if(restaurant.getAverageRating()>=4 && restaurant.getAverageRating()<4.75){
-					starRating=4;
-				}
-				else{
-					starRating=5;
-				}
-				return starRating==restaurantFilter.rating;
-			}).collect(Collectors.toList());
-		}
-		Long numberOfPages = new Long(restaurants.size() / restaurantFilter.pageSize);
-*/
-
 		switch (restaurantFilter.sortBy) {
 			case "rating":
 				restaurants.sort((o1, o2) -> o2.getAverageRating().compareTo(o1.getAverageRating()));
 				break;
 		}
-
 
 		return PaginationAdapter.createOutput()
 				.setPageNumber(restaurantFilter.pageNumber)
