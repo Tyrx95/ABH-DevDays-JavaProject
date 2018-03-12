@@ -153,7 +153,7 @@ public class RestaurantController extends BaseController {
 	}
 
 	/**
-	 * Post review result.♦
+	 * Post review result.?
 	 *
 	 * @return the result
 	 */
