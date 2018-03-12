@@ -395,7 +395,7 @@ public class Restaurant extends BaseModel {
 	 * @param tables the tables
 	 */
 	public void setTables(List<RestaurantTable> tables) {
-		this.tables = tables;
+		this.tables=tables;
 	}
 
 	/**

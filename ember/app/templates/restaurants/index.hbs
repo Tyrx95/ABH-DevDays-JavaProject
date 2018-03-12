@@ -6,7 +6,7 @@
         <div class="col-xs-12">
           <form class="search-box restaurant-filter-box">
             <label for="search">{{fa-icon "search"}}</label>
-            {{input id='search' class="search-textbox restaurant_search_textbox" placeholder='Search for a restaurantTTT...' value=nameFilter}}
+            {{input id='search' class="search-textbox restaurant_search_textbox" placeholder='Search for a restaurant...' value=nameFilter}}
             <button type="button" class="show-popup-button" {{action 'showSort'}}>Sort by {{fa-icon "chevron-down"}}</button>
             <button type="button" class="show-popup-button" {{action 'showFilters'}}>Filter by {{fa-icon "chevron-down"}}</button>
             <div id="searchFilters" class="hidden">
@@ -30,7 +30,7 @@
                   {{#radio-button value=5 groupValue=ratingFilter changed="ratingFilterChanged"}}{{fa-icon "star"}}{{/radio-button}}
                 </div>
                 <hr>
-                <h5>Cousine</h5>
+                <h5>Cuisine</h5>
                 {{#multiselect-checkboxes options=model.cuisines selection=cuisineFilter as |cuisine isSelected|}}
                   <li>
                     <label class="{{if isSelected 'active'}}">

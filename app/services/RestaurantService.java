@@ -82,7 +82,12 @@ public class RestaurantService extends BaseService {
 
 		if (restaurantFilter.cuisine != null && !restaurantFilter.cuisine.isEmpty() ) {
 			Criteria cuisineCriteria = criteria.createCriteria("cuisines");
-			cuisineCriteria.add(Restrictions.ilike("name", restaurantFilter.cuisine, MatchMode.ANYWHERE));
+			Disjunction disjunction = Restrictions.disjunction();
+			for(String singleCuisine : restaurantFilter.cuisine.split(",")){
+                disjunction.add(Restrictions.eq("name", singleCuisine));
+            }
+			cuisineCriteria.add(disjunction);
+
 		}
 
 		if (restaurantFilter.cityId != null) {
@@ -108,7 +113,7 @@ public class RestaurantService extends BaseService {
 			criteria.addOrder(Order.desc("priceRange"));
 		}
 
-		criteria.addOrder(Order.asc("name"));
+		criteria.addOrder(Order.asc("name")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		List<Restaurant> restaurants = criteria.list();
 

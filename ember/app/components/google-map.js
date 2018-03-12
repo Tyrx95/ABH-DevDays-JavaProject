@@ -1,6 +1,3 @@
-import Ember from 'ember';
-import $ from 'jquery';
-
 export default Ember.Component.extend({
   editableMarker: false,
   editableBounds: false,
@@ -11,35 +8,40 @@ export default Ember.Component.extend({
   },
 
   renderGoogleMap(container) {
+    let defaultLat=43.846941;
+    let defaultLen=18.372303;
+    let centerLat,centerLng;
+    console.log('markerLat',this.get('markerLat'));
+    if((this.get('markerLat') === 0 && this.get('markerLng') === 0) || this.get('markerLat') === undefined ||
+      this.get('markerLng') === undefined){
+      centerLat=defaultLat;
+      centerLng=defaultLen;
+    }
+    else{
+      centerLat=this.get('markerLat');
+      centerLng=this.get('markerLng');
+    }
+
     let options = {
-      center: new window.google.maps.LatLng(43.9, 18),
-      zoom: 7,
+      center: new window.google.maps.LatLng(centerLat, centerLng),
+      zoom: 12,
     };
 
     let map = new window.google.maps.Map(container, options);
 
     let bounds = (typeof this.get('bounds') !== 'undefined') ? JSON.parse(this.get('bounds')) : null;
     let coords = (bounds !== null && bounds.length > 0) ? bounds :
-      [
-        { lat: 44.773, lng: 17.244 },
-        { lat: 43.624, lng: 17.310 },
-        { lat: 43.630, lng: 18.904 },
-        { lat: 44.773, lng: 18.907 },
-      ];
-
-    let zoomBounds = new google.maps.LatLngBounds();
-    for (let coordiante in coords) {
-      if (coords.hasOwnProperty(coordiante)) {
-        zoomBounds.extend(new google.maps.LatLng(coords[coordiante].lat, coords[coordiante].lng));
-      }
-    }
-
-    map.fitBounds(zoomBounds);
+    [
+      { lat: 44.773, lng: 17.244 },
+      { lat: 43.624, lng: 17.310 },
+      { lat: 43.630, lng: 18.904 },
+      { lat: 44.773, lng: 18.907 },
+    ];
 
     let markerPosition;
-    if (this.get('markerLat') === 0 && this.get('markerLng') === 0) {
-      markerPosition = zoomBounds.getCenter();
-      this.set('defaultMerkerPosition', markerPosition);
+    if((this.get('markerLat') === 0 && this.get('markerLng') === 0) || this.get('markerLat') === undefined ||
+      this.get('markerLng') === undefined) {
+      markerPosition= new google.maps.LatLng(defaultLat, defaultLen);
     } else {
       markerPosition = new google.maps.LatLng(this.get('markerLat'), this.get('markerLng'));
     }
@@ -48,6 +50,9 @@ export default Ember.Component.extend({
       position: markerPosition,
       draggable: this.get('editableMarker'),
     });
+
+    marker.setMap(map);
+    this.set('marker', marker);
 
     marker.setMap(map);
     this.set('marker', marker);
@@ -63,9 +68,6 @@ export default Ember.Component.extend({
       draggable: this.get('editableBounds'),
       geodesic: true,
     });
-
-    polygon.setMap(map);
     this.set('polygon', polygon);
   }
 });
-

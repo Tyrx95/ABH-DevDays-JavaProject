@@ -3,7 +3,7 @@
     <div class="restaurant-tile-image" style={{tileStyle}}></div>
     <h3 class="restaurant-tile-name">{{data.name}}</h3>
     <p class="restaurant-tile-rating">
-      {{star-score averageRating=data.averageRating}}
+      {{star-score averageRating=data.starRating}}
       <span class="restaurant-tile-ratecount">({{data.numberOfRatings}})</span>
       {{price-range priceRange=data.priceRange class="restaurant-tile-pricernage"}}
     </p>

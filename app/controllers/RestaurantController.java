@@ -10,6 +10,7 @@ import play.mvc.Result;
 import services.RestaurantService;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -81,6 +82,19 @@ public class RestaurantController extends BaseController {
 	@Transactional(readOnly = true)
 	public Result getAllRestaurants() {
 		String cityFilter = request().getQueryString(CITY_FILTER);
+		String cuisine="";
+		String[] cuisineFilterParam =  request().queryString().get(CUISINE_FILTER);
+		if (cuisineFilterParam != null) {
+			for (String str : cuisineFilterParam) {
+				if (!str.isEmpty() && str != null) {
+					cuisine = cuisine.concat(str + ",");
+				}
+			}
+		}
+        if(cuisine.endsWith(",")){
+            cuisine = cuisine.substring(0,cuisine.length() - 1);
+        }
+        String cuisineFilter = cuisine;
 		return wrapForPublic(() -> this.service.findRestaurantsWithFilter(
 				RestaurantFilter.createFilter()
 						.setPageNumber(getQueryInt(request().getQueryString(PAGE_NUMBER), DEFAULT_PAGE_NUMBER))
@@ -90,7 +104,7 @@ public class RestaurantController extends BaseController {
 						.setSort(request().getQueryString(SORT_BY))
 						.setPriceFilter(getQueryInt(request().getQueryString(PRICE_FILTER), DEFAULT_PRICE_FILTER))
 						.setRatingFilter(getQueryInt(request().getQueryString(RATING_FILTER), DEFAULT_RATING_FILTER))
-                        .setCuisineFilter(request().getQueryString(CUISINE_FILTER))
+                        .setCuisineFilter(cuisineFilter)
 
 		));
 	}
