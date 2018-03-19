@@ -237,20 +237,23 @@ public class RestaurantService extends BaseService {
 	private void updateStarRating(final UUID restaurantId) {
 		Restaurant restaurant = getRestaurantWithId(restaurantId);
 		int starRating;
-		if(restaurant.getAverageRating()>=0.25 && restaurant.getAverageRating()<2){
-			starRating=1;
+		if(restaurant.getAverageRating() >= 4.75){
+			starRating = 5;
 		}
-		else if(restaurant.getAverageRating()>=2 && restaurant.getAverageRating()<3){
-			starRating=2;
+		else if(restaurant.getAverageRating() >= 4){
+			starRating = 4;
 		}
-		else if(restaurant.getAverageRating()>=3 && restaurant.getAverageRating()<4){
-			starRating=3;
+		else if(restaurant.getAverageRating() >= 3){
+			starRating = 3;
 		}
-		else if(restaurant.getAverageRating()>=4 && restaurant.getAverageRating()<4.75){
-			starRating=4;
+		else if(restaurant.getAverageRating() >= 2){
+			starRating = 2;
+		}
+		else if(restaurant.getAverageRating() >= 0.25){
+			starRating = 1;
 		}
 		else{
-			starRating=5;
+			starRating = 0;
 		}
 		restaurant.setStarRating(starRating);
 		getSession().save(restaurant);

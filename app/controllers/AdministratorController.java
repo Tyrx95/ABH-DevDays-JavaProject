@@ -5,6 +5,7 @@ import play.db.jpa.Transactional;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.AdministratorService;
+import utils.FileNameUtils;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class AdministratorController extends BaseController {
 
 	private AdministratorService service;
+	private static final String IMAGE_ASSETS_DIRECTORY = "public/assets/images/";
 
 	/**
 	 * Sets service.
@@ -38,28 +40,25 @@ public class AdministratorController extends BaseController {
 	public Result fileUpload() {
 		Http.MultipartFormData<File> body = request().body().asMultipartFormData();
 		Http.MultipartFormData.FilePart<File> picture = body.getFile("file");
-		String restaurantId = request().body().asMultipartFormData().asFormUrlEncoded().get("restaurantId")[0];
-		String imageFor = request().body().asMultipartFormData().asFormUrlEncoded().get("imageType")[0];
-		String[] timestamp =request().body().asMultipartFormData().asFormUrlEncoded().get("timestamp");
-		final String basePath = "public/assets/images/";
+		Map<String , String[]> formData = request().body().asMultipartFormData().asFormUrlEncoded();
+		String restaurantId = formData.get("restaurantId")[0];
+		String imageFor = formData.get("imageType")[0];
+		String[] timestamp = formData.get("timestamp");
 		String pathString;
-		if(imageFor.equals("gallery") && timestamp!=null){
-		    pathString = basePath + restaurantId+"-"+timestamp[0]+".";
-			System.out.println("pathString : "+pathString);
+		if(imageFor.equals("gallery") && timestamp != null){
+		    pathString = IMAGE_ASSETS_DIRECTORY + restaurantId + "-" + timestamp[0] + ".";
         }
         else{
-			pathString=basePath+restaurantId+"-"
-					+imageFor+".";
+			pathString = IMAGE_ASSETS_DIRECTORY + restaurantId + "-" + imageFor + ".";
 		}
 		if (picture != null) {
-			String[] fileNameSplit = picture.getFilename().split("\\.");
-			String fileExt = fileNameSplit[fileNameSplit.length-1];
-			pathString+=fileExt;
+			pathString+= FileNameUtils.getExtension(picture.getFilename());
 			File file = picture.getFile();
 			try {
 				Files.move(Paths.get(file.getAbsolutePath()), Paths.get(pathString), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
+				flash("error", "File not saved successfully");
 			}
 			return ok("File uploaded");
 		} else {

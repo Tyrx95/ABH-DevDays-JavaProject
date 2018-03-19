@@ -11,9 +11,8 @@ export default Ember.Component.extend({
     let defaultLat=43.846941;
     let defaultLen=18.372303;
     let centerLat,centerLng;
-    console.log('markerLat',this.get('markerLat'));
-    if((this.get('markerLat') === 0 && this.get('markerLng') === 0) || this.get('markerLat') === undefined ||
-      this.get('markerLng') === undefined){
+    if((this.get('markerLat') === 0 && this.get('markerLng') === 0) || !this.get('markerLat') ||
+      !this.get('markerLng')){
       centerLat=defaultLat;
       centerLng=defaultLen;
     }
@@ -39,8 +38,8 @@ export default Ember.Component.extend({
     ];
 
     let markerPosition;
-    if((this.get('markerLat') === 0 && this.get('markerLng') === 0) || this.get('markerLat') === undefined ||
-      this.get('markerLng') === undefined) {
+    if((this.get('markerLat') === 0 && this.get('markerLng') === 0) || !this.get('markerLat')  ||
+      !this.get('markerLng')) {
       markerPosition= new google.maps.LatLng(defaultLat, defaultLen);
     } else {
       markerPosition = new google.maps.LatLng(this.get('markerLat'), this.get('markerLng'));
@@ -50,9 +49,6 @@ export default Ember.Component.extend({
       position: markerPosition,
       draggable: this.get('editableMarker'),
     });
-
-    marker.setMap(map);
-    this.set('marker', marker);
 
     marker.setMap(map);
     this.set('marker', marker);

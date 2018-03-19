@@ -167,7 +167,7 @@
           <div id="gallery-restaurant" class="restaurant-card">
             <h2 class="restaurant-card-title inline">Restaurants Photo:</h2>
 
-            {{#if model.restaurant.photos.[0]}}
+            {{#if model.restaurant.photos}}
               {{#if seeMorePhotos}}
                 <button class="btn btn-default" {{action "toggleSeeMore"}}>See less photos</button>
                 {{#each (chunk 6 model.restaurant.photos) as |photoRow|}}
