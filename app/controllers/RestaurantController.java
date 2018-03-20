@@ -10,6 +10,7 @@ import play.mvc.Result;
 import services.RestaurantService;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,9 +25,15 @@ public class RestaurantController extends BaseController {
 	private static final String NAME_FILTER = "nameFilter";
 	private static final String CITY_FILTER = "cityFilter";
 	private static final String SORT_BY = "sortBy";
+	private static final String PRICE_FILTER = "priceFilter";
+	private static final String RATING_FILTER = "ratingFilter";
+    private static final String CUISINE_FILTER = "cuisineFilter";
 
 	private static final Integer DEFAULT_PAGE_NUMBER = 1;
 	private static final Integer DEFAULT_PAGE_SIZE = 9;
+	private static final Integer DEFAULT_PRICE_FILTER = 0;
+	private static final Integer DEFAULT_RATING_FILTER = 0;
+
 
 	/**
 	 * Sets service.
@@ -75,6 +82,19 @@ public class RestaurantController extends BaseController {
 	@Transactional(readOnly = true)
 	public Result getAllRestaurants() {
 		String cityFilter = request().getQueryString(CITY_FILTER);
+		String cuisine="";
+		String[] cuisineFilterParam =  request().queryString().get(CUISINE_FILTER);
+		if (cuisineFilterParam != null) {
+			for (String str : cuisineFilterParam) {
+				if (!str.isEmpty() && str != null) {
+					cuisine = cuisine.concat(str + ",");
+				}
+			}
+		}
+        if(cuisine.endsWith(",")){
+            cuisine = cuisine.substring(0,cuisine.length() - 1);
+        }
+        String cuisineFilter = cuisine;
 		return wrapForPublic(() -> this.service.findRestaurantsWithFilter(
 				RestaurantFilter.createFilter()
 						.setPageNumber(getQueryInt(request().getQueryString(PAGE_NUMBER), DEFAULT_PAGE_NUMBER))
@@ -82,6 +102,10 @@ public class RestaurantController extends BaseController {
 						.setNameFilter(request().getQueryString(NAME_FILTER))
 						.setCityFilter(!StringUtil.isNullOrEmpty(cityFilter) ? UUID.fromString(cityFilter) : null)
 						.setSort(request().getQueryString(SORT_BY))
+						.setPriceFilter(getQueryInt(request().getQueryString(PRICE_FILTER), DEFAULT_PRICE_FILTER))
+						.setRatingFilter(getQueryInt(request().getQueryString(RATING_FILTER), DEFAULT_RATING_FILTER))
+                        .setCuisineFilter(cuisineFilter)
+
 		));
 	}
 
@@ -129,7 +153,7 @@ public class RestaurantController extends BaseController {
 	}
 
 	/**
-	 * Post review result.
+	 * Post review result.?
 	 *
 	 * @return the result
 	 */

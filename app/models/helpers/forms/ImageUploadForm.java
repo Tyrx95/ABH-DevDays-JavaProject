@@ -12,6 +12,7 @@ public class ImageUploadForm extends BaseModel {
     private UUID restaurantId;
     private String imageType;
     private String extension;
+    private String timestamp;
 
     /**
      * Instantiates a new Image upload form.
@@ -62,5 +63,24 @@ public class ImageUploadForm extends BaseModel {
      */
     public void setExtension(String extension) {
         this.extension = extension;
+    }
+
+
+    /**
+     * Gets timestamp
+     *
+     * @return the timestamp
+     */
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * Sets timestamp.
+     *
+     * @param timestamp the timestamp
+     */
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

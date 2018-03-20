@@ -77,6 +77,9 @@ public class Restaurant extends BaseModel {
 	@Column(name = "longitude")
 	private Float longitude;
 
+	@Column(name = "starRating")
+	private Integer starRating;
+
 	@OneToMany(mappedBy = "restaurantId")
 	private List<RestaurantPhoto> photos;
 
@@ -95,6 +98,10 @@ public class Restaurant extends BaseModel {
 
 	@Transient
 	private Double averageRating;
+
+
+
+
 
 	/**
 	 * Instantiates a new Restaurant.
@@ -388,7 +395,7 @@ public class Restaurant extends BaseModel {
 	 * @param tables the tables
 	 */
 	public void setTables(List<RestaurantTable> tables) {
-		this.tables = tables;
+		this.tables=tables;
 	}
 
 	/**
@@ -453,5 +460,21 @@ public class Restaurant extends BaseModel {
 	 */
 	public void setAverageRating(Double averageRating) {
 		this.averageRating = averageRating;
+	}
+
+	/**
+	 *  set star rating
+	 * @return the star rating
+	 */
+	public Integer getStarRating() {
+		return starRating;
+	}
+
+	/**
+	 *
+	 * @param starRating the star rating
+	 */
+	public void setStarRating(Integer starRating) {
+		this.starRating = starRating;
 	}
 }

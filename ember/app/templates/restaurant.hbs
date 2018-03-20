@@ -70,6 +70,11 @@
           </div>
           <div id="about" class="restaurant-card">
             <h2 class="restaurant-card-title">About {{model.restaurant.name}}</h2>
+            {{google-map
+              markerLat=model.restaurant.latitude
+              markerLng=model.restaurant.longitude
+              bounds=model.restaurant.city.bounds
+            }}
             <h5 class="restaurant-card-subtitle">Description</h5>
             <p class="restaurant-card-bodytext">
               {{model.restaurant.description}}
@@ -158,6 +163,74 @@
               </div>
             </div>
           </div>
+
+          <div id="gallery-restaurant" class="restaurant-card">
+            <h2 class="restaurant-card-title inline">Restaurants Photo:</h2>
+
+            {{#if model.restaurant.photos}}
+              {{#if seeMorePhotos}}
+                <button class="btn btn-default" {{action "toggleSeeMore"}}>See less photos</button>
+                {{#each (chunk 6 model.restaurant.photos) as |photoRow|}}
+                  <div class="row">
+                    {{#each photoRow as |photo|}}
+                      <div class="col-md-2">
+                        <img src="{{photo.path}}" alt="gallery photo" class="img-responsive">
+                      </div>
+                    {{/each}}
+                  </div>
+                {{/each}}
+
+              {{else}}
+                <button class="btn btn-default" {{action "toggleSeeMore"}}>See more photos ({{model.restaurant.photos.length}})</button>
+              <div class="row">
+                <div class="col-md-6">
+                  <img src="{{model.restaurant.photos.[0].path}}" alt="Restaurant photo" class="img-responsive"/>
+                </div>
+                <div class="col-md-6">
+                  <div class="row gallery-restaurant-right">
+                    <div class="col-md-6">
+                      {{#if model.restaurant.photos.[1]}}
+                      <img src="{{model.restaurant.photos.[1].path}}" alt="Restaurant photo" class="img-responsive"/>
+                      {{/if}}
+                    </div>
+                    <div class="col-md-6">
+                      {{#if model.restaurant.photos.[2]}}
+                        <img src="{{model.restaurant.photos.[2].path}}" alt="Restaurant photo" class="img-responsive"/>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="row gallery-restaurant-right">
+                    <div class="col-md-6">
+                      {{#if model.restaurant.photos.[3]}}
+                        <img src="{{model.restaurant.photos.[3].path}}" alt="Restaurant photo" class="img-responsive"/>
+                      {{/if}}
+                    </div>
+                    <div class="col-md-6">
+                      {{#if model.restaurant.photos.[4]}}
+                        <img src="{{model.restaurant.photos.[4].path}}" alt="Restaurant photo" class="img-responsive"/>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="row gallery-restaurant-right">
+                    <div class="col-md-6">
+                      {{#if model.restaurant.photos.[5]}}
+                        <img src="{{model.restaurant.photos.[5].path}}" alt="Restaurant photo" class="img-responsive"/>
+                      {{/if}}
+                    </div>
+                    <div class="col-md-6">
+                      {{#if model.restaurant.photos.[6]}}
+                        <img src="{{model.restaurant.photos.[6].path}}" alt="Restaurant photo" class="img-responsive"/>
+                      {{/if}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {{/if}}
+
+            {{else}}
+            <div>No pictures available for this restaurant.</div>
+            {{/if}}
+          </div>
         </div>
       </div>
     </div>
@@ -187,3 +260,7 @@
     </div>
   </div>
 </div>
+
+
+
+

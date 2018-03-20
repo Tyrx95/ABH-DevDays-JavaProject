@@ -107,4 +107,5 @@ abstract class BaseController extends Controller {
 			return defaultValue;
 		}
 	}
+
 }

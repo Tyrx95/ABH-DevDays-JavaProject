@@ -954,6 +954,24 @@ footer {
     margin-right: 40px;
   }
 
+  .restaurant-card-title.inline {
+    display:inline-block;
+  }
+
+#gallery-restaurant .btn-default {
+  float: right;
+  border: none;
+  font-weight: bold;
+}
+
+#gallery-restaurant .btn-default:active {
+  background: white;
+}
+
+.row.gallery-restaurant-right
+{
+  padding-bottom: 5px;
+}
 .restaurant-navigation {
   display: block;
   padding-left: 20px;
@@ -1533,6 +1551,46 @@ footer {
         color: #fff;
       }
 
+  .image-upload-label-gallery {
+    text-align: center;
+    border-radius: 3px;
+    padding: 2px 15px;
+    width: 10%;
+    background-color: rgba(19, 29, 36, 0.4);
+    color: #fff;
+    position: absolute;
+    top: 30px;
+    right: 40px;
+   }
+
+  .image-upload-label-gallery:hover{
+    cursor:pointer;
+  }
+
+  #gallery .col-md-2{
+    height:200px;
+  }
+
+  #gallery .img-responsive{
+    height: -webkit-fill-available;
+  }
+
+  #gallery .row{
+    padding-top:20px;
+  }
+
+.btn-remove-photo {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  background: transparent;
+  border:none;
+}
+
+button.btn-remove-photo:hover {
+  border-style: solid;
+}
+
   .admin-form-image-profile {
     position: relative;
     width: 160px;
@@ -1551,6 +1609,15 @@ footer {
     background-position: center;
     margin-top: -15px;
     margin-bottom: 10px;
+  }
+
+  .admin-form-photos-add{
+    position: relative;
+    height: 100px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    margin-top: -15px;
   }
 
 .nav-pills a {
@@ -1640,7 +1707,8 @@ footer {
 }
 
 #coverImageUpload,
-#profileImageUpload {
+#profileImageUpload,
+#galleryImageUpload{
   visibility: hidden;
 }
 
@@ -1669,6 +1737,12 @@ footer {
   color: #fff;
   font-size: 14px;
 }
+
+.gallery-img-admin{
+  height:auto;
+  width:100%;
+}
+
 
 .table-box {
   display: block;

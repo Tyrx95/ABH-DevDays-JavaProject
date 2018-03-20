@@ -30,7 +30,7 @@
                   {{#radio-button value=5 groupValue=ratingFilter changed="ratingFilterChanged"}}{{fa-icon "star"}}{{/radio-button}}
                 </div>
                 <hr>
-                <h5>Cousine</h5>
+                <h5>Cuisine</h5>
                 {{#multiselect-checkboxes options=model.cuisines selection=cuisineFilter as |cuisine isSelected|}}
                   <li>
                     <label class="{{if isSelected 'active'}}">

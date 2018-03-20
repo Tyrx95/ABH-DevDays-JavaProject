@@ -6,15 +6,9 @@ import models.helpers.PopularRestaurantsBean;
 import models.helpers.RestaurantFilter;
 import models.helpers.forms.ImageUploadForm;
 import models.helpers.forms.ReviewForm;
-import models.tables.Reservation;
-import models.tables.Restaurant;
-import models.tables.RestaurantReview;
-import models.tables.User;
+import models.tables.*;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.hibernate.transform.Transformers;
 
 import javax.inject.Inject;
@@ -30,7 +24,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class RestaurantService extends BaseService {
 
-	private static final String AWS_BASE_PATH = "https://abhrestaurants.s3.amazonaws.com/";
+	private static final String BASE_PATH = "http://localhost:9000/assets/images/";
 
 	@Inject
 	private RestaurantService() { }
@@ -86,8 +80,26 @@ public class RestaurantService extends BaseService {
 			criteria.add(Restrictions.ilike("name", restaurantFilter.name, MatchMode.ANYWHERE));
 		}
 
+		if (restaurantFilter.cuisine != null && !restaurantFilter.cuisine.isEmpty() ) {
+			Criteria cuisineCriteria = criteria.createCriteria("cuisines");
+			Disjunction disjunction = Restrictions.disjunction();
+			for(String singleCuisine : restaurantFilter.cuisine.split(",")){
+                disjunction.add(Restrictions.eq("name", singleCuisine));
+            }
+			cuisineCriteria.add(disjunction);
+
+		}
+
 		if (restaurantFilter.cityId != null) {
 			criteria.add(Restrictions.eq("city.id", restaurantFilter.cityId));
+		}
+
+		if (restaurantFilter.price != null && restaurantFilter.price != 0) {
+			criteria.add(Restrictions.eq("priceRange", restaurantFilter.price));
+		}
+
+		if (restaurantFilter.rating != null && restaurantFilter.rating != 0){
+			criteria.add(Restrictions.eq("starRating", restaurantFilter.rating));
 		}
 
 		Long numberOfPages = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult()) / restaurantFilter.pageSize;
@@ -96,11 +108,12 @@ public class RestaurantService extends BaseService {
 				.setFirstResult((restaurantFilter.pageNumber - 1) * restaurantFilter.pageSize)
 				.setMaxResults(restaurantFilter.pageSize);
 
+
 		if (restaurantFilter.sortBy.equals("price")) {
 			criteria.addOrder(Order.desc("priceRange"));
 		}
 
-		criteria.addOrder(Order.asc("name"));
+		criteria.addOrder(Order.asc("name")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		List<Restaurant> restaurants = criteria.list();
 
@@ -217,8 +230,35 @@ public class RestaurantService extends BaseService {
 		}
 
 		getSession().save(restaurantReview);
+		updateStarRating(reviewForm.getRestaurantId());
 		return true;
 	}
+
+	private void updateStarRating(final UUID restaurantId) {
+		Restaurant restaurant = getRestaurantWithId(restaurantId);
+		int starRating;
+		if(restaurant.getAverageRating() >= 4.75){
+			starRating = 5;
+		}
+		else if(restaurant.getAverageRating() >= 4){
+			starRating = 4;
+		}
+		else if(restaurant.getAverageRating() >= 3){
+			starRating = 3;
+		}
+		else if(restaurant.getAverageRating() >= 2){
+			starRating = 2;
+		}
+		else if(restaurant.getAverageRating() >= 0.25){
+			starRating = 1;
+		}
+		else{
+			starRating = 0;
+		}
+		restaurant.setStarRating(starRating);
+		getSession().save(restaurant);
+	}
+
 
 	/**
 	 * Gets number of restaurants.
@@ -243,12 +283,23 @@ public class RestaurantService extends BaseService {
 				.add(Restrictions.eq("id", imageUploadForm.getRestaurantId()))
 				.uniqueResult();
 
-		String newImagePath = AWS_BASE_PATH + imageUploadForm.getRestaurantId() + "-" + imageUploadForm.getImageType() + "." + imageUploadForm.getExtension();
-
+		String newImagePath = BASE_PATH + imageUploadForm.getRestaurantId() + "-";
 		if (imageUploadForm.getImageType().equals("profile")) {
 			restaurant.setProfileImagePath(newImagePath);
-		} else {
+			newImagePath+=imageUploadForm.getImageType() + "." + imageUploadForm.getExtension();
+		} else if (imageUploadForm.getImageType().equals("cover")){
 			restaurant.setCoverImagePath(newImagePath);
+			newImagePath+=imageUploadForm.getImageType() + "." + imageUploadForm.getExtension();
+		}
+		else {
+			newImagePath+=imageUploadForm.getTimestamp()+ "." + imageUploadForm.getExtension();;
+			RestaurantPhoto newPhoto = new RestaurantPhoto();
+			newPhoto.setRestaurantId(imageUploadForm.getRestaurantId());
+			newPhoto.setPath(newImagePath);
+			getSession().persist(newPhoto);
+
+			return "{ \"id\": \"" + newPhoto.getId()
+					+ "\", \"restaurantId\": \"" + newPhoto.getRestaurantId() +"\", \"path\": \"" + newPhoto.getPath() + "\"}";
 		}
 
 		getSession().update(restaurant);

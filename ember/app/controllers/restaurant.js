@@ -18,6 +18,7 @@ export default Ember.Controller.extend({
   numberOfPeople: 1,
   review_text: '',
   review_score: 0,
+  seeMorePhotos: false,
 
   areAvailableTables: gt('model.response.numberOfTablesLeft', 0),
 
@@ -121,7 +122,9 @@ export default Ember.Controller.extend({
     ratingChanged(value) {
       $('#rating-control input').each((index, element) => $(element).parent().css('color', element.value < value ? '#fd6f60' : 'rgba(19, 29, 36, 0.2)'));
     },
-
+    toggleSeeMore(){
+      this.toggleProperty('seeMorePhotos');
+    }
   },
 
 });

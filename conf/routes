@@ -65,9 +65,16 @@ GET     /api/v1/getAllCities                                controllers.CityCont
 
 # ADMINISTRATOR MANAGEMENT ROUTES --------------------------------------------------------------------------------------
 
+POST    /api/v1/fileUpload                                  controllers.AdministratorController.fileUpload()
+DELETE  /api/v1/admin/deletePicture/:id                     controllers.AdministratorController.deletePicture(id: String)
+
 # EMBER PASSTHROUGH ROUTES ---------------------------------------------------------------------------------------------
 
 GET     /assets/*file                                       controllers.Assets.at(path="/public/assets", file)
 GET     /fonts/*file                                        controllers.Assets.at(path="/public/fonts", file)
 GET     /                                                   controllers.EmberController.index(slug="")
 GET     /*slug                                              controllers.EmberController.index(slug)
+
+
+# MY ROUTES ------------------------------------------------------------------------------------------------------------
+OPTIONS /api/v1/fileUpload                                  controllers.EmberController.checkPreFlight

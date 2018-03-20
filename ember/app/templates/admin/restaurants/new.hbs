@@ -4,6 +4,9 @@
     <li role="presentation"><a href="#cuisine" aria-controls="cuisine" role="tab" data-toggle="tab">Cuisines</a></li>
     <li role="presentation"><a href="#tables" aria-controls="tables" role="tab" data-toggle="tab">Tables</a></li>
     <li role="presentation"><a href="#menu" aria-controls="menu" role="tab" data-toggle="tab">Menu</a></li>
+    {{#if model.isEdit}}
+    <li role="presentation"><a href="#gallery" aria-controls="gallery" role="tab" data-toggle="tab">Gallery</a></li>
+    {{/if}}
   </ul>
 </div>
 
@@ -245,7 +248,52 @@
         </div>
       </div>
     </div>
+    {{#if model.isEdit}}
+    <div role="tabpanel" class="tab-pane" id="gallery">
+      <div class="admin-form">
 
+        <h1 class="admin-from-title">Photos</h1>
+
+        <div class="admin-form-photos-add">
+          <label class="image-upload-label-gallery" for="galleryImageUpload">
+            {{#if uploadProgressGallery}}
+              <p class="image-upload-progress">
+                Uploading: {{uploadProgressGallery}}%
+              </p>
+            {{/if}}
+            Add photos
+          </label>
+          {{file-upload id="galleryImageUpload"
+            url="http://localhost:9000/api/v1/fileUpload"
+            restaurantId=model.restaurant.id
+            imageFor="gallery"
+            progress=uploadProgressGallery
+            onFinishedUpload=(action 'uploadedGalleryImage')}}
+        </div>
+
+
+
+        {{#each (chunk 6 model.restaurant.photos) as |photoRow|}}
+        <div class="row">
+          {{#each photoRow as |photo|}}
+            <div class="col-md-2">
+              <img src="{{photo.path}}" alt="gallery photo" class="img-responsive">
+              <button {{action 'removePhoto' photo}} class="btn-remove-photo">{{fa-icon 'trash'}}</button>
+            </div>
+          {{/each}}
+        </div>
+        {{/each}}
+
+        <div class="row">
+          <div class="col-xs-12" style="text-align: right">
+            {{#link-to 'admin.restaurants' class="form-button form-button-small form-button-grey"}}Cancel{{/link-to}}
+            <button class="form-button form-button-small" type="submit">{{if model.isEdit 'Edit' 'Add'}} Restaurant</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {{/if}}
   </div>
 
 </form>

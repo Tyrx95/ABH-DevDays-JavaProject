@@ -16,6 +16,7 @@ export default Ember.Controller.extend({
 
   uploadProgressProfile: null,
   uploadProgressCover: null,
+  uploadProgressGallery: null,
   trueClass: 'full',
   falseClass: 'empty',
 
@@ -52,6 +53,15 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
+
+    removePhoto(photo) {
+      this.get('ajax').del('/admin/deletePicture/' + photo.id, {
+        xhrFields: {
+          withCredentials: true,
+        },
+      }).then(() => this.get('model.restaurant.photos').removeObject(photo));
+    },
+
     addTable() {
       this.get('model.restaurant.tables').pushObject({ id: null, restaurantId: this.get('model.restaurant.id'), numberOfChairs: 0 });
     },
@@ -127,6 +137,24 @@ export default Ember.Controller.extend({
         },
       })
       .then((response) => this.set(response.imageFor === 'profile' ? 'model.restaurant.profileImagePath' : 'model.restaurant.coverImagePath', response.url));
+    },
+
+    uploadedGalleryImage(imageFor, fileExtension, timestamp) {
+      this.get('ajax').patch('/admin/updatePicture', {
+        xhrFields: {
+          withCredentials: true,
+        },
+        data: {
+          restaurantId: this.get('model.restaurant.id'),
+          imageType: imageFor,
+          extension: fileExtension,
+          timestamp: timestamp,
+        },
+      })
+        .then((response) => {
+          this.get('model.restaurant.photos').pushObject(JSON.parse(response));
+
+        });
     },
 
     addMenuBreakfast() {
