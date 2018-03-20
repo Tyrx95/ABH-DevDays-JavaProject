@@ -1,6 +1,8 @@
 package services;
 
-import models.tables.RestaurantPhoto;
+import models.helpers.AdministratorStatistics;
+import models.tables.*;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import play.mvc.Result;
 
@@ -40,6 +42,25 @@ public class AdministratorService extends BaseService {
 		return true;
 	}
 
+	public AdministratorStatistics getAdministratorStatistics(){
+      Long numberOfRestaurants = Long.valueOf(getSession().createCriteria(Restaurant.class)
+                .setProjection(Projections.rowCount())
+                .uniqueResult().toString());
+      Long numberOfLocations = Long.valueOf(getSession().createCriteria(City.class)
+              .setProjection(Projections.rowCount())
+              .uniqueResult().toString());
+      Long numberOfUsers = Long.valueOf(getSession().createCriteria(User.class)
+              .setProjection(Projections.rowCount())
+              .uniqueResult().toString());
+      Long numberOfCuisines = Long.valueOf(getSession().createCriteria(Cuisine.class)
+              .setProjection(Projections.rowCount())
+              .uniqueResult().toString());
 
+      return AdministratorStatistics.createAdminStatistics()
+              .setNumberOfRestaurants(numberOfRestaurants)
+              .setNumberOfLocations(numberOfLocations)
+              .setNumberOfUsers(numberOfUsers)
+              .setNumberOfCuisines(numberOfCuisines);
+	}
 
 }

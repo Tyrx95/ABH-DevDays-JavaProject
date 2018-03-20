@@ -67,6 +67,7 @@ GET     /api/v1/getAllCities                                controllers.CityCont
 
 POST    /api/v1/fileUpload                                  controllers.AdministratorController.fileUpload()
 DELETE  /api/v1/admin/deletePicture/:id                     controllers.AdministratorController.deletePicture(id: String)
+GET     /api/v1/admin/getAdministratorStatistics            controllers.AdministratorController.getAdministratorStatistics
 
 # EMBER PASSTHROUGH ROUTES ---------------------------------------------------------------------------------------------
 

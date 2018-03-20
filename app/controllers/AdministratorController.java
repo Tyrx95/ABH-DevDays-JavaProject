@@ -72,5 +72,11 @@ public class AdministratorController extends BaseController {
 		return wrapForAdmin(() -> this.service.deletePicture(UUID.fromString(id)));
 	}
 
+	@Transactional
+	public Result getAdministratorStatistics() {
+		return wrapForAdmin(() -> this.service.getAdministratorStatistics());
+	}
+
+
 
 }
