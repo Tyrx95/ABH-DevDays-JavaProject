@@ -54,7 +54,8 @@ public class ReservationController extends BaseController {
 	 */
 	@Transactional
 	public Result postReservation() {
-		return wrapForPublic(() -> this.service.postReservation(formFactory.form(ReservationForm.class).bindFromRequest().get()));
+		return wrapForPublic(() -> this.service.postReservation(formFactory.form(ReservationForm.class)
+				.bindFromRequest().get()));
 	}
 
 	/**

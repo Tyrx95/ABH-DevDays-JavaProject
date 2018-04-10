@@ -77,6 +77,10 @@ public class AdministratorController extends BaseController {
 		return wrapForAdmin(() -> this.service.getAdministratorStatistics());
 	}
 
+    @Transactional
+    public Result getAllActivityLogs() {
+        return wrapForAdmin(() -> this.service.getAllActivityLogs());
+    }
 
 
 }

@@ -2,6 +2,7 @@ package services;
 
 import models.helpers.AdministratorStatistics;
 import models.tables.*;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import play.mvc.Result;
@@ -13,6 +14,7 @@ import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -63,4 +65,10 @@ public class AdministratorService extends BaseService {
               .setNumberOfCuisines(numberOfCuisines);
 	}
 
+	public List<ActivityLog> getAllActivityLogs(){
+		return (List<ActivityLog>) getSession().createCriteria(ActivityLog.class)
+				.addOrder(Order.desc("logTime"))
+				.setMaxResults(200)
+				.list();
+	}
 }
