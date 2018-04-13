@@ -46,9 +46,9 @@ public class AdministratorController extends BaseController {
 		String[] timestamp = formData.get("timestamp");
 		String pathString;
 		if(imageFor.equals("gallery") && timestamp != null){
-		    pathString = IMAGE_ASSETS_DIRECTORY + restaurantId + "-" + timestamp[0] + ".";
-        }
-        else{
+			pathString = IMAGE_ASSETS_DIRECTORY + restaurantId + "-" + timestamp[0] + ".";
+		}
+		else{
 			pathString = IMAGE_ASSETS_DIRECTORY + restaurantId + "-" + imageFor + ".";
 		}
 		if (picture != null) {
@@ -77,8 +77,8 @@ public class AdministratorController extends BaseController {
 		return wrapForAdmin(() -> this.service.getAdministratorStatistics());
 	}
 
-    @Transactional
-    public Result getAllActivityLogs() {
+	@Transactional
+	public Result getAllActivityLogs() {
         return wrapForAdmin(() -> this.service.getAllActivityLogs());
     }
 

@@ -64,7 +64,7 @@ public class CityService extends BaseService {
 	 */
 	public Boolean editCity(final City city) throws Exception {
 		getSession().update(city);
-        log("The city by name:" + city.getName() + " has been edited by admin." );
+		log("The city by name:" + city.getName() + " has been edited by admin." );
 		return true;
 	}
 
@@ -80,7 +80,7 @@ public class CityService extends BaseService {
 				.uniqueResult();
 
 		getSession().delete(city);
-        log("The city by name:" + city.getName() + " has been deleted by admin." );
+		log("The city by name:" + city.getName() + " has been deleted by admin." );
 		return true;
 	}
 }

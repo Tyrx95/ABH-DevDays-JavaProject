@@ -234,9 +234,13 @@ public class RestaurantService extends BaseService {
 
 		getSession().save(restaurantReview);
 		updateStarRating(reviewForm.getRestaurantId());
-		log("The user: " + user.getName() + " has posted a review for a restaurant:"
-				+ getRestaurantWithId(reviewForm.getRestaurantId()).getName() + " rating it with: " +
-				reviewForm.getReviewScore() + " and the following text: \n" + reviewForm.getReviewText());
+		String userName = user.getName();
+		String restaurantName = getRestaurantWithId(reviewForm.getRestaurantId()).getName();
+		Integer reviewScore = reviewForm.getReviewScore();
+		String reviewText = reviewForm.getReviewText();
+		log("The user: " + userName + " has posted a review for a restaurant:" +
+				restaurantName + " rating it with: " +
+				reviewScore + " and the following text: \n" + reviewText);
 		return true;
 	}
 
