@@ -133,9 +133,20 @@ public class UserService extends BaseService {
 			dbUser.setIsAdmin(user.getIsAdmin());
 
 			getSession().update(dbUser);
-			return true;
+			if(user.getIsAdmin()) {
+				log("The role for the user: " +
+						user.getName() +
+						" has been modified and changed to admin");
+				return true;
+			}
+			else{
+				log("The role for the user: " +
+						user.getName() + " " +
+						"has been modified and changed to regular user");
+				return true;
+			}
 		}
-		return false;
+		return true;
 	}
 
 

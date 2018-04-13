@@ -64,6 +64,7 @@ public class CuisineService extends BaseService {
 	 */
 	public Boolean createCuisine(final Cuisine cuisine) {
 		getSession().save(cuisine);
+		log("The cuisine by name:" + cuisine.getName() + " has been created by admin." );
 		return true;
 	}
 
@@ -75,6 +76,8 @@ public class CuisineService extends BaseService {
 	 */
 	public Boolean editCuisine(final Cuisine cuisine) {
 		getSession().update(cuisine);
+		log("The cuisine by name:" + cuisine.getName() + " has been edited by admin." );
+
 		return true;
 	}
 
@@ -88,7 +91,7 @@ public class CuisineService extends BaseService {
 		Cuisine cuisine = (Cuisine) getSession().createCriteria(Cuisine.class)
 				.add(Restrictions.eq("id", id))
 				.uniqueResult();
-
+		log("The cuisine by name:" + cuisine.getName() + " has been deleted by admin." );
 		getSession().delete(cuisine);
 		return true;
 	}

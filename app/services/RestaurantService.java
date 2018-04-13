@@ -37,6 +37,7 @@ public class RestaurantService extends BaseService {
 	 */
 	public Boolean createRestaurant(final Restaurant restaurant) throws Exception {
 		getSession().save(restaurant);
+		log("The restaurant by name:" + restaurant.getName() + " has been created by admin." );
 		return true;
 	}
 
@@ -48,6 +49,7 @@ public class RestaurantService extends BaseService {
 	 */
 	public Boolean editRestaurant(final Restaurant restaurant) throws Exception {
 		getSession().merge(restaurant);
+		log("The restaurant by name:" + restaurant.getName() + " has been edited by admin." );
 		return true;
 	}
 
@@ -63,6 +65,7 @@ public class RestaurantService extends BaseService {
 				.uniqueResult();
 
 		getSession().delete(restaurant);
+		log("The restaurant by name:" + restaurant.getName() + " has been deleted by admin." );
 		return true;
 	}
 
@@ -231,6 +234,13 @@ public class RestaurantService extends BaseService {
 
 		getSession().save(restaurantReview);
 		updateStarRating(reviewForm.getRestaurantId());
+		String userName = user.getName();
+		String restaurantName = getRestaurantWithId(reviewForm.getRestaurantId()).getName();
+		Integer reviewScore = reviewForm.getReviewScore();
+		String reviewText = reviewForm.getReviewText();
+		log("The user: " + userName + " has posted a review for a restaurant:" +
+				restaurantName + " rating it with: " +
+				reviewScore + " and the following text: \n" + reviewText);
 		return true;
 	}
 

@@ -1,0 +1,15 @@
+<div class="admin-form">
+  <h1 class="admin-from-title">Activity Log</h1>
+  <ul class="log-list">
+    {{#each model.logs as |log|}}
+      <li class="log-item">
+        <div class="log-meta">
+          <span class="timestamp">{{millis-to-date log.logTime}}</span>
+        </div>
+        <div class="log-message">
+          {{log.description}}
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+</div>

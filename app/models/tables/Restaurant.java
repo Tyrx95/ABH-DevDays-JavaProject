@@ -77,7 +77,7 @@ public class Restaurant extends BaseModel {
 	@Column(name = "longitude")
 	private Float longitude;
 
-	@Column(name = "starRating")
+	@Column(name = "star_rating")
 	private Integer starRating;
 
 	@OneToMany(mappedBy = "restaurantId")

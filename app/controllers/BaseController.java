@@ -42,9 +42,11 @@ abstract class BaseController extends Controller {
 			return (Result) block.call();
 		} catch (ServiceException se) {
 			String message = se.getMessage() != null ? se.getMessage() : "Unknown Error";
+			se.printStackTrace();
 			return badRequest(Json.toJson(se.getMessage()));
 		} catch (Exception e) {
 			String message = e.getMessage() != null ? e.getMessage() : "Unknown Error";
+			e.printStackTrace();
 			return internalServerError(Json.toJson(e.getMessage()));
 		}
 	}

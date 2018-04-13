@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS restaurant (
 	address character varying(128) NOT NULL,
 	phone character varying(17) NOT NULL,
 	price_range smallint NOT NULL,
+	star_rating smallint DEFAULT 0,
 	cover_image_path character varying(256) NOT NULL,
 	profile_image_path character varying(256) NOT NULL,
 	description text NOT NULL,
@@ -75,6 +76,12 @@ CREATE TABLE IF NOT EXISTS restaurant_photo (
 	photo_path character varying(256) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS activity_log (
+	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	logTime timestamp without time zone NOT NULL,
+	description character varying(256) NOT NULL
+);
+
 # --- !Downs
 
 DROP TABLE IF EXISTS restaurant_photo;
@@ -84,5 +91,7 @@ DROP TABLE IF EXISTS reservation;
 DROP TABLE IF EXISTS restaurant_review;
 DROP TABLE IF EXISTS restaurant_table;
 DROP TABLE IF EXISTS restaurant;
-DROP TABLE IF EXISTS city;
-DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE IF EXISTS city CASCADE;
+DROP TABLE IF EXISTS activity_log;
+

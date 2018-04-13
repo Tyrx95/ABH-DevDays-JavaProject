@@ -45,6 +45,7 @@ Router.map(function () {
       this.route('edit', { path: 'edit/:cuisine_id' });
       this.route('delete', { path: 'delete/:cuisine_id' });
     });
+    this.route('logs');
   });
 
   this.route('reservation-details', { path: 'reservation-details/:reservation_id' });

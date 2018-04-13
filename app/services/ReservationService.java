@@ -162,7 +162,6 @@ public class ReservationService extends BaseService {
 		);
 
 		getSession().save(reservation);
-
 		return reservation;
 	}
 
@@ -175,6 +174,11 @@ public class ReservationService extends BaseService {
 	 */
 	public Boolean confirmReservation(ReservationConfirmationForm reservationConfirmationForm) throws Exception {
 		getSession().saveOrUpdate(reservationConfirmationForm.getReservation());
+		String userReservationName = reservationConfirmationForm.getReservation().getUser().getName();
+		String reservationDate = reservationConfirmationForm.getReservation().getDate();
+		String reservationTime = reservationConfirmationForm.getReservation().getTime();
+		log("The new reservation was made by user: " + userReservationName + " on " +
+				reservationDate + " "  + reservationTime);
 		return true;
 	}
 
