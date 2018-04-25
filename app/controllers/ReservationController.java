@@ -2,6 +2,7 @@ package controllers;
 
 import models.helpers.forms.ReservationConfirmationForm;
 import models.helpers.forms.ReservationForm;
+import models.tables.User;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import services.ReservationService;
@@ -37,6 +38,11 @@ public class ReservationController extends BaseController {
 		return wrapForPublic(() -> this.service.getReservation(UUID.fromString(id)));
 	}
 
+	@Transactional
+	public Result deleteReservation(String id) {
+		return wrapForPublic(() -> this.service.deleteReservation(UUID.fromString(id)));
+	}
+
 	/**
 	 * Post reservation inquiry result.
 	 *
@@ -54,8 +60,9 @@ public class ReservationController extends BaseController {
 	 */
 	@Transactional
 	public Result postReservation() {
+		User user = this.cache.get(session("uid"));
 		return wrapForPublic(() -> this.service.postReservation(formFactory.form(ReservationForm.class)
-				.bindFromRequest().get()));
+				.bindFromRequest().get(), user));
 	}
 
 	/**

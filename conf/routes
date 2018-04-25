@@ -41,7 +41,7 @@ POST    /api/v1/confirmReservation                          controllers.Reservat
 
 GET     /api/v1/getMyReservations                           controllers.ReservationController.getMyReservations
 GET     /api/v1/admin/getAllReservations/:rId/:date         controllers.ReservationController.getAllReservations(rId: String, date: String)
-
+DELETE  /api/v1/deleteReservation/:id                       controllers.ReservationController.deleteReservation(id: String)
 # CUISINE MANAGEMENT ROUTES --------------------------------------------------------------------------------------------
 
 GET     /api/v1/getCuisine/:id                              controllers.CuisineController.getCuisine(id: String)
