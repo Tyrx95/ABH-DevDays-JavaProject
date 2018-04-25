@@ -119,7 +119,6 @@ public class ReservationService extends BaseService {
 			List <Reservation> reservedTables = getSession().createCriteria(Reservation.class)
 					.add(Restrictions.between("startTime", fortyFiveMinutesBefore, oneHourAfter))
 					.add(Restrictions.in("table.id", potentialTableIds))
-					.add(Restrictions.eq("isConfirmed", true))
 					.list();
 
 			freeTableIds.addAll(potentialTableIds.stream().filter(potentialTableId ->
@@ -147,11 +146,12 @@ public class ReservationService extends BaseService {
 	 * @return the reservation
 	 * @throws Exception the exception
 	 */
-	public Reservation postReservation(ReservationForm reservationForm) throws Exception {
+	public Reservation postReservation(ReservationForm reservationForm, User user) throws Exception {
 		Reservation reservation = new Reservation();
 		reservation.setStartTime(reservationForm.getDate().getTime() + reservationForm.getTime().getTime() + ONE_HOUR_MILLIS);
 		reservation.setReservedOn(System.currentTimeMillis());
 		reservation.setConfirmed(false);
+		reservation.setUser(user);
 
 		reservation.setTable(
 				this.getFreeTables(
@@ -215,5 +215,15 @@ public class ReservationService extends BaseService {
 				.add(Restrictions.between("startTime", t1, t2))
 				.add(Restrictions.eq("isConfirmed", true))
 				.list();
+	}
+
+	public Boolean deleteReservation(final UUID uuid){
+		Reservation reservation = (Reservation) getSession().createCriteria(Reservation.class)
+				.add(Restrictions.eq("id", uuid))
+				.uniqueResult();
+
+		getSession().delete(reservation);
+		log("The reservation has been deleted." );
+		return true;
 	}
 }
